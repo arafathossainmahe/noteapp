@@ -1,8 +1,8 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:noteapp/firebase_options.dart';
-//import 'package:noteapp/homepage.dart';
-import 'package:noteapp/homepage2.dart';
+import 'package:noteapp/homepage.dart';
+//import 'package:noteapp/homepage2.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -26,7 +26,7 @@ class MyApp extends StatelessWidget {
         ),
         useMaterial3: true,
       ),
-      home: HomePage2(),
+      home: HomePage(),
       debugShowCheckedModeBanner: false,
     );
   }

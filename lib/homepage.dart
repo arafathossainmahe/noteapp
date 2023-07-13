@@ -26,6 +26,17 @@ class HomePage extends StatelessWidget {
     await FirebaseFirestore.instance.collection("notes").doc(id).delete();
   }
 
+  Future<void> updateData(String id) async {
+    Map<String, dynamic> addData = {
+      "title": titlecontroller.text,
+      "text": textcontroller.text
+    };
+    await FirebaseFirestore.instance
+        .collection("notes")
+        .doc(id)
+        .update(addData);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -72,10 +83,72 @@ class HomePage extends StatelessWidget {
                             ),
                           ],
                         ),
-                        IconButton(
-                            onPressed: () =>
-                                deletData(snapshot.data!.docs[index].id),
-                            icon: const Icon(Icons.delete))
+                        Row(
+                          children: [
+                            IconButton(
+                              onPressed: () =>
+                                  deletData(snapshot.data!.docs[index].id),
+                              icon: const Icon(Icons.delete),
+                            ),
+                            IconButton(
+                              onPressed: () {
+                                titlecontroller.text =
+                                    snapshot.data!.docs[index]['title'];
+                                textcontroller.text =
+                                    snapshot.data!.docs[index]['text'];
+                                showModalBottomSheet(
+                                  context: context,
+                                  builder: (BuildContext context) => Container(
+                                    height: double.infinity,
+                                    width: double.infinity,
+                                    color: Colors.deepPurple.withOpacity(0.3),
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(12),
+                                      child: Column(
+                                        children: [
+                                          TextField(
+                                            controller: titlecontroller,
+                                            decoration: const InputDecoration(
+                                              hintText: 'Enter Title Here',
+                                              border: OutlineInputBorder(),
+                                            ),
+                                          ),
+                                          const SizedBox(
+                                            height: 12,
+                                          ),
+                                          TextField(
+                                            controller: textcontroller,
+                                            decoration: const InputDecoration(
+                                              hintText: 'Enter Text Here',
+                                              border: OutlineInputBorder(),
+                                            ),
+                                          ),
+                                          const SizedBox(
+                                            height: 12,
+                                          ),
+                                          ElevatedButton(
+                                            onPressed: () => updateData(
+                                                snapshot.data!.docs[index].id),
+                                            child: const Padding(
+                                              padding: EdgeInsets.only(
+                                                  top: 15, bottom: 15),
+                                              child: Text(
+                                                'Update Note',
+                                                style: TextStyle(fontSize: 20),
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                  barrierColor: Colors.transparent,
+                                );
+                              },
+                              icon: const Icon(Icons.edit),
+                            ),
+                          ],
+                        )
                       ],
                     ),
                   ),
